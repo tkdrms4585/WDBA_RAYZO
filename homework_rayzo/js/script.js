@@ -45,8 +45,30 @@ $(document).ready(function () {
                 items: 3
             }
         }
-    })
+    });
 
+    //faq accordion
+    $(' .faq-head').each(function () {
+        $(this).click(function () {
+            $(this).next().toggleClass('show-faq-content');
+            let icon = $(this).children('span').children("i").attr('class');
+
+            if (icon == "fas fa-plus") {
+                $(this).children('span').html('<i class = "fas fa-minus"></i>');
+            } else {
+                $(this).children('span').html('<i class = "fas fa-plus"></i>');
+            }
+        });
+    });
+
+    //testimonial carousel
+    $('.testimonial .owl-carousel').owlCarousel({
+        loop: true,
+        autoplay: true,
+        dots: true,
+        nav: false,
+        items: 1
+    });
 });
 
 //모달창
