@@ -1,0 +1,234 @@
+모듈은 2가지로 나눌 수 있는데요.
+
+외장 모듈
+      - 일반 Node.js 개발자들이 만들어 놓은 모듈(라이브러리)입니다.
+      - 외장 모듈을 사용하기 위해서는 npm( Node Package Manager )을 사용합니다.
+내장 모듈
+      - Node.js를 설치하고 나면 그 안에 이미 제공되어지는 모듈을 의미합니다.
+      - 내장 모듈은 이미 Node.js를 설치할 때 존재하기 때문에 npm을 사용하지 않습니다.
+
+
+모듈을 생성하기 위해서는 exports 전역 객체를 사용하고, 
+모듈을 불러오기 위해서는 require() 메서드를 사용합니다.
+
+
+1) 모듈 생성하기
+
+모듈을 생성하는 방법으로 2가지가 있습니다.
+
+calc.js 파일을 만들어서 아래와 같이 작성합니다.
+
+// 첫 번째 방법 : exports에 직접 프로퍼티를 설정
+exports.add = function(a, b){
+    return a + b;
+}
+
+exports.multiply = function(a, b){
+    return a * b;
+}
+
+exports 객체에 직접 add와 multiply 프로퍼티를 추가하는 방법입니다.
+
+
+
+다음은 calc라는 빈 객체를 생성한 후에 calc 객체에 add와 multiply 프로퍼티를 추가한 후, 
+module.exports 에 calc 객체를 할당하는 방법입니다.
+
+// 두 번째 방법 : 새로운 객체에 프로퍼티를 설정 후 module.export에 할당하기
+var calc = {};
+
+calc.add = function(a, b){
+    return a + b;
+}
+
+calc.multiply = function(a, b){
+    return a * b;
+}
+
+module.exports = calc;
+
+
+
+두 방법 모두 모듈을 생성하는 방법입니다. 즉, calc.js 파일은 모듈입니다.
+
+그런데 exports 객체에 직접 프로퍼티를 할당하는 방법( 첫번째 방법)과 
+module.exports에 객체를 할당하는 방법( 두번째 방법 )은 조금 차이가 있습니다.
+
+일반적으로 후자의 방법을 많이 사용합니다.
+
+이 부분은 뒤에서 살펴볼 것이며, 우선은 이렇게 2가지 방법으로 모듈을 생성할 수 있다는 점만 아시면 됩니다.
+
+
+
+2) 모듈 불러오기
+
+다음으로 module.js 파일을 만들어서 위에서 작성한 모듈을 불러오도록 하겠습니다. 
+( 첫번째 방법, 두번째 방법 어떤 코드든 상관없습니다. )
+
+// [ 코드 3 ]
+// calc.js 파일 불러오기
+// require()는 exports 객체를 반환한다.
+var calc = require("./calc");
+
+console.log(calc.add(3, 5));
+모듈을 불러오기 위해서는 require() 함수를 호출하면 되고, 인자로 파일 경로( ./calc )를 전달합니다.
+
+파일 경로는 확장자인 .js를 생략하고 파일명만 전달해도 됩니다.
+
+
+
+require() 함수의 반환 값은 exports 객체이며, calc 변수는 exports 객체처럼 사용할 수 있습니다.
+
+즉, calc.js에서 exports에 add와 multiply 프로퍼티를 추가했었기 때문에, 
+calc 변수 역시 add와 multiply 프로퍼티를 갖고 있습니다.
+
+
+
+3) 실행
+
+이제 테스트를 위해 커맨더 창에서 아래의 명령어를 실행합니다.
+
+# node module.js
+
+module.js에서 calc 모듈을 불러오는 것이므로 실행파일은 calc.js가 아닌 moduel.js입니다.
+
+
+실행 결과는 콘솔에 8이 출력됩니다.
+
+
+
+이렇게 모듈을 생성하고 호출하는 기본적인 방법에 대해 알아보았습니다.
+
+
+
+
+3. 기존의 exports를 새로운 객체로 지정하기
+
+"모듈생성하기 - 두 번째 방법"에서 module.exports에 calc 객체를 할당하여, 모듈을 생성했습니다.
+
+그런데 module.exports가 아닌 exports에 calc 객체를 할당한다면 어떻게 될까요?
+
+// exports에 직접 객체 할당
+var calc = {};
+
+calc.add = function(a, b){
+    return a + b;
+}
+
+calc.multiply = function(a, b){
+    return a * b;
+}
+
+exports = calc;
+
+moduel.js 파일을 실행하면, module.js 파일의 calc 객체에서 
+add 메서드를 찾을 수 없다고 합니다.
+
+# node module.js
+
+
+
+
+그 이유는 Node.js가 모듈을 처리할 때 exports를 속성으로 인식하기 때문입니다.
+
+그래서 exports에 새로운 객체를 할당 해버리면, 노드는 더 이상 exports를 
+모듈 시스템에서 처리할 수 있는 전역변수가 아닌 다른 변수로 인식하게 됩니다.
+
+
+
+따라서 "모듈생성하기 - 첫번째 방법"과 같이 노드가 알고 있는 
+exports 객체에 프로퍼티를 추가하여 사용하던지, 
+
+아니면 "모듈생성하기 - 두번째 방법"과 같이 module.exports에 
+새로운 객체를 할당해서 사용해야 합니다.
+
+위의 예제처럼 exports에 직접 객체를 할당해주거나 객체를 직접 정의하면 
+모듈을 불러올 수 없게 됩니다.
+
+
+
+
+exports  vs  module.exports
+
+"모듈 생성하기"은 모듈을 정의하는 두 가지 방법에 대해 말해줍니다.
+
+이번에는 두 방식에 차이에 대해 살펴볼텐데요, 
+결론적으로 "두 번째 방법"인 module.exports를 사용해서 객체를 할당해주는 것이 더 좋습니다.
+
+
+
+1) 객체 할당 불가
+
+"첫 번째 방법"처럼 exports를 사용할 경우, exports에 직접 객체를 할당할 수 없습니다.
+
+"2. 기존의 exports를 새로운 객체로 지정하기"에서 보았던 것처럼 에러가 발생합니다.
+
+
+
+2) module.exports에 의해 무시
+
+예제를 살펴보도록 하겠습니다.
+
+
+- user.js -
+
+module.exports = {
+    name: "victolee",
+    age: 25
+}
+
+exports.name = "victolee22";
+
+
+- module.js - 
+
+var user = require("./user");
+
+console.log(user.name)
+
+
+>node module.js
+victolee
+
+
+user.js에 module.exports와 exports에서 동시에 name 프로퍼티를 추가했을 경우
+(이런 경우는 없겠지만...), 실행 결과는 "victolee"입니다.
+
+즉, exports.name="victolee22"는 무시 되었습니다.
+
+
+
+그 이유는 exports는 단순히 module.exports를 참조할 뿐이며, 
+exports에서 할당된 프로퍼티는 require()에서 module.exports에 추가되도록 처리됩니다.
+
+이 둘의 차이점에 대해, 좋은 글이 있으니 참고하시길 바랍니다. ( 링크 )
+
+어쨋든 공식문서에서 제안하고 또 일반적으로 많이 쓰이는 방법은 
+"모듈 생성하기 - 두번째 방법"이라는 점입니다.
+
+
+
+
+
+
+
+
+
+5. module.exports에 함수 할당하기
+
+지금까지 requrie()로 모듈을 불러올 때 모두 객체를 전달 받았습니다.
+
+모듈은 반환할 때 객체 뿐만 아니라 함수를 반환할 수도 있습니다.
+
+
+
+foo.js
+
+module.exports = function(){
+    return 1234;
+}
+module.js
+
+var foo = require("./foo");
+console.log("숫자 : %s ", foo());
+자바스크립트에서는 함수도 객체이므로 당연한 결과입니다.

@@ -1,0 +1,13 @@
+https://victorydntmd.tistory.com/25?category=677306
+
+
+*** Error ***
+
+ER_NOT_SUPPORTED_AUTH_MODE: Client does not support authentication protocol requested by server; 
+consider upgrading MySQL client
+
+서버 실행시 위와 같은 에러가 발생한다면, MySQL에서 아래의 명령어를 실행하면 해결됩니다. ( 참고 링크 )
+아마 MySQL 버전이 8.x일 때 발생하는 문제 같습니다.
+
+# ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '새로운 비밀번호';
+# flush privileges;

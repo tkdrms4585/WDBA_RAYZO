@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <!--<link> 태그 부분에 stylesheets/style.css 파일은 public 폴더 안에 있기 때문에, 
+        href 속성의 경로는 public/stylesheets/style.css 가 되어야 할텐데, 
+        /stylesheets/style.css가 작성되어 있습니다.
+
+        public이 없는데 알아서 잘 css 파일을 찾아가고 있는 상황이죠 -->
+
+    <!--그 이유는 app.js에서 public 폴더에 대한 접근을 가상 경로인 /로 설정했기 때문.        
+        app.js
+        
+        app.use(express.static(path.join(__dirname, 'public'))); -->
+  </head>
+  <body>
+    <% include header %>
+    <!--어떤 ejs 파일에 다른 ejs 파일을 포함하고 싶을 경우 include 지시어를 사용
+    <% include header %>를 사용해서 header.ejs 파일을 include 하는 코드
+    이렇게 헤더(header)와 푸터(footer)처럼, 
+    모든 페이지에 동일하게 추가돼야 하는 템플릿인 경우, include를 활용하면 좋습니다.-->
+
+    <h1><%= title %></h1>
+    <p>Welcome to <%= title %></p>
+  </body>
+</html>
