@@ -1,4 +1,4 @@
-$(document).ready(function () {
+$(function () {
 
     //navigation bar toggle
     $('#navbar-toggler').click(function () {
@@ -70,6 +70,8 @@ $(document).ready(function () {
         items: 1
     });
 });
+
+
 
 //모달창
 // document.getElementById("test").onclick = function () {
